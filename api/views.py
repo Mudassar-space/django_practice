@@ -21,7 +21,7 @@ def studentsView(request):
         serializer_data.save()
         return Response(serializer_data.data, status=status.HTTP_201_CREATED)
     
-@api_view(['GET','PUT', 'PATCH'])
+@api_view(['GET','PUT', 'PATCH', 'DELETE'])
 def studentupdate(request, pk = None):
     student =  get_object_or_404(Student, pk = pk)
     print(student,"<<<<<<<<<<<<<<<<<<<<<")
@@ -30,7 +30,9 @@ def studentupdate(request, pk = None):
         stu_serializer = StudentSerializer(student)  # Fix 2: Pass object, not data
         print(stu_serializer, "????????????????????")
         return Response(stu_serializer.data, status=status.HTTP_200_OK)
-    
+    if request.method == 'DELETE':
+        student.delete()
+        return Response({"message":"student deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
     if request.method == "PUT":
         stu_serializer = StudentSerializer(student, data = request.data)
 
@@ -42,6 +44,9 @@ def studentupdate(request, pk = None):
         return Response(stu_serializer.data, status=status.HTTP_200_OK)
     else:
         return Response(stu_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
 
 
 
