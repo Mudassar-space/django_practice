@@ -16,6 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from hotel import views
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+
+router.register('hotelapi', views.HotelViewSet, basename='hotel')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,6 +30,9 @@ urlpatterns = [
     path('students/', include('students.urls')),
 
     # API Endpoints
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
 
-    path('api/v1/', include('api.urls'))
+    path('api/v1/', include('api.urls')),
+    # path('hotel/', include('hotel.urls')),
+    path('', include(router.urls))
 ]
